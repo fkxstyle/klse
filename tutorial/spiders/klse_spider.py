@@ -40,3 +40,4 @@ class KlseSpider(scrapy.Spider):
 
         # scrapy runspider klse_spider.py -o item.json 
         # scrapy shell 'https://www.klsescreener.com/v2/stocks/view/7087'
+        # test
