@@ -1,0 +1,15 @@
+*.zip
+__pycache__
+/__pycache__
+__pycache__/
+.coverage
+.tox/
+*.pyc
+*.bak
+.DS_Store
+_build/
+venv
+venv36
+.idea
+.cpython-36.pyc
+.json
