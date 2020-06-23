@@ -8,7 +8,11 @@ class KlseSpider(scrapy.Spider):
     def start_requests(self):
 
         urls = [
-            'https://www.klsescreener.com/v2/stocks/view/7087'
+            'https://www.klsescreener.com/v2/stocks/view/7087',
+            'https://www.klsescreener.com/v2/stocks/view/7088',
+            'https://www.klsescreener.com/v2/stocks/view/7089',
+            'https://www.klsescreener.com/v2/stocks/view/7090',
+            'https://www.klsescreener.com/v2/stocks/view/7091',
         ]
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
@@ -20,6 +24,9 @@ class KlseSpider(scrapy.Spider):
         ]
         result = {}
 
+        name, code = response.xpath('//*[@class="col-lg-5"]/h1/text()').extract_first().replace(' ', '').split('(')
+        result['name'] = name
+        result['code'] = code.replace(')', '')
         result['price'] = response.xpath('//*[@id="price"]/text()').extract_first()
         stock_details = response.xpath('//*[@class="stock_details table table-hover table-striped table-theme"]//td/text()')
         
@@ -40,4 +47,4 @@ class KlseSpider(scrapy.Spider):
 
         # scrapy runspider klse_spider.py -o item.json 
         # scrapy shell 'https://www.klsescreener.com/v2/stocks/view/7087'
-        # test
+        # git push https://fkxstyle@github.com/fkxstyle/klse.git
