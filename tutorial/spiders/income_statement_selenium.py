@@ -5,13 +5,21 @@ import time
 import json
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as cond
 
-class IncomeStatement(unittest.TestCase):
+class MorningStar(unittest.TestCase):
 
     def setUp(self):
         self.download_path = "/Users/fookianxiong/Documents/Projects/klse/downloads/{}/"
+        self.income_statement_xpath = '//*[@id="__layout"]/div/div[3]/main/div[2]/div/div/div[1]/sal-components/section/div/div/div/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[2]/div[1]/div[1]/a'
+        self.balance_sheet_xpath = '//*[@id="__layout"]/div/div[3]/main/div[2]/div/div/div[1]/sal-components/section/div/div/div/div/div[2]/div/div[1]/div[2]/div[2]/div/div[2]/div/div[2]/div[2]/div[2]/div[1]/a'
+        self.cash_flow_xpath = '//*[@id="__layout"]/div/div[3]/main/div[2]/div/div/div[1]/sal-components/section/div/div/div/div/div[2]/div/div[1]/div[2]/div[2]/div/div[2]/div/div[2]/div[2]/div[3]/div[1]/a'
+        self.export_excel_xpath = '//*[@id="__layout"]/div/div[3]/main/div[2]/div/div/div[1]/sal-components/section/div/div/div/div/div[2]/div/div[2]/div/div[2]/div/div[1]/div[4]/button'
+        self.back_to_summary_xpath = '//*[@id="__layout"]/div/div[3]/main/div[2]/div/div/div[1]/sal-components/section/div/div/div/div/div[2]/div/div[2]/div/div[2]/div/div[2]/div[1]/h4/a'
 
-    def testPageTitle(self):
+    def testExportExcel(self):
         # load json data
         with open('tutorial/spiders/item.json') as json_file:
             stocks = json.load(json_file)
@@ -38,7 +46,13 @@ class IncomeStatement(unittest.TestCase):
             # Access morningstar website
             time.sleep(3)
             browser.get(url)
-            time.sleep(8)
+
+            # Wait til Income statement appear
+            WebDriverWait(browser, 10).until(
+                cond.presence_of_element_located(
+                    (By.XPATH, self.income_statement_xpath)
+                )
+            )
 
             # Click continue to site, if any
             elements = browser.find_elements_by_xpath('//*[@id="__layout"]/div/div[4]/div/div/header/div/div[3]/button')
@@ -48,12 +62,37 @@ class IncomeStatement(unittest.TestCase):
                 time.sleep(3)
 
             # Click Income statement
-            element = browser.find_element_by_xpath('//*[@id="__layout"]/div/div[3]/main/div[2]/div/div/div[1]/sal-components/section/div/div/div/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[2]/div[1]/div[1]/a')
+            element = browser.find_element_by_xpath(self.income_statement_xpath)
+            element.click()
+            time.sleep(3)
+            # Click Export to excel
+            element = browser.find_element_by_xpath(self.export_excel_xpath)
+            element.click()
+            time.sleep(3)
+            # Click Back to Summary View
+            element = browser.find_element_by_xpath(self.back_to_summary_xpath)
             element.click()
             time.sleep(3)
 
+            # Click Balance Sheet
+            element = browser.find_element_by_xpath(self.balance_sheet_xpath)
+            element.click()
+            time.sleep(3)
             # Click Export to excel
-            element = browser.find_element_by_xpath('//*[@id="__layout"]/div/div[3]/main/div[2]/div/div/div[1]/sal-components/section/div/div/div/div/div[2]/div/div[2]/div/div[2]/div/div[1]/div[4]/button')
+            element = browser.find_element_by_xpath(self.export_excel_xpath)
+            element.click()
+            time.sleep(3)
+            # Click Back to Summary View
+            element = browser.find_element_by_xpath(self.back_to_summary_xpath)
+            element.click()
+            time.sleep(3)
+
+            # Click Cash Flow
+            element = browser.find_element_by_xpath(self.cash_flow_xpath)
+            element.click()
+            time.sleep(3)
+            # Click Export to excel
+            element = browser.find_element_by_xpath(self.export_excel_xpath)
             element.click()
             time.sleep(3)
 
