@@ -1,5 +1,6 @@
 import os
 import shutil
+import glob
 import unittest
 import time
 import json
@@ -12,7 +13,8 @@ from selenium.webdriver.support import expected_conditions as cond
 class MorningStar(unittest.TestCase):
 
     def setUp(self):
-        self.download_path = "/Users/fookianxiong/Documents/Projects/klse/downloads/{}/"
+        ## Configuration
+        self.download_path = "/Users/fookianxiong/Documents/Projects/klse/downloads/"
         self.income_statement_xpath = '//*[@id="__layout"]/div/div[3]/main/div[2]/div/div/div[1]/sal-components/section/div/div/div/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[2]/div[1]/div[1]/a'
         self.balance_sheet_xpath = '//*[@id="__layout"]/div/div[3]/main/div[2]/div/div/div[1]/sal-components/section/div/div/div/div/div[2]/div/div[1]/div[2]/div[2]/div/div[2]/div/div[2]/div[2]/div[2]/div[1]/a'
         self.cash_flow_xpath = '//*[@id="__layout"]/div/div[3]/main/div[2]/div/div/div[1]/sal-components/section/div/div/div/div/div[2]/div/div[1]/div[2]/div[2]/div/div[2]/div/div[2]/div[2]/div[3]/div[1]/a'
@@ -25,26 +27,21 @@ class MorningStar(unittest.TestCase):
             stocks = json.load(json_file)
 
         morningstar_url = 'https://www.morningstar.com/stocks/xkls/{}/financials'
+        
+        # Instiantiate browser
+        options = Options()
+        options.add_experimental_option("prefs", {
+            "download.default_directory": self.download_path,
+            "download.prompt_for_download": False,
+            "download.directory_upgrade": True,
+            "safebrowsing.enabled": True
+        })
+        browser = webdriver.Chrome(options=options)
 
         for stock in stocks:
             url = morningstar_url.format(stock['code'])
-            download_path = self.download_path.format(stock['name'])
-            
-            # Create directory if not exist
-            if not os.path.exists(download_path):
-                os.makedirs(download_path)
-
-            options = Options()
-            options.add_experimental_option("prefs", {
-                "download.default_directory": download_path,
-                "download.prompt_for_download": False,
-                "download.directory_upgrade": True,
-                "safebrowsing.enabled": True
-            })
-            browser = webdriver.Chrome(options=options)
 
             # Access morningstar website
-            time.sleep(3)
             browser.get(url)
 
             # Wait til Income statement appear
@@ -94,8 +91,17 @@ class MorningStar(unittest.TestCase):
             # Click Export to excel
             element = browser.find_element_by_xpath(self.export_excel_xpath)
             element.click()
-            time.sleep(3)
+            time.sleep(6)
 
+            # Create directory for stock if not exist
+            if not os.path.exists(self.download_path + stock['name']):
+                os.makedirs(self.download_path + stock['name'])
+        
+            # Get list of downloaded excel files
+            excel_file_paths = glob.glob("downloads/*.xls")
+            # move to stock folder
+            for excel_file_path in excel_file_paths:
+                shutil.move(excel_file_path, self.download_path + stock['name'])
 
 if __name__ == '__main__':
     unittest.main(verbosity=4)
