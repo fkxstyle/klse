@@ -22,6 +22,11 @@ class MorningStar(unittest.TestCase):
         self.back_to_summary_xpath = '//*[@id="__layout"]/div/div[3]/main/div[2]/div/div/div[1]/sal-components/section/div/div/div/div/div[2]/div/div[2]/div/div[2]/div/div[2]/div[1]/h4/a'
 
     def testExportExcel(self):
+        # Delete everything in downloads folder
+        downloaded_files = glob.glob(self.download_path + '*')
+        for f in downloaded_files:
+            shutil.rmtree(f)
+
         # load json data
         with open('tutorial/spiders/item.json') as json_file:
             stocks = json.load(json_file)
@@ -105,3 +110,4 @@ class MorningStar(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main(verbosity=4)
+    # python tutorial/spiders/morningstar_selenium.py
