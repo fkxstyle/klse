@@ -27,6 +27,7 @@ class KlseSpider(scrapy.Spider):
         name, code = response.xpath('//*[@class="col-lg-5"]/h1/text()').extract_first().replace(' ', '').split('(')
         result['name'] = name
         result['code'] = code.replace(')', '')
+        result['category'] = response.xpath('//*[@id="page"]/div[2]/div[1]/div[2]/div[1]/span[2]/text()').extract_first()
         result['price'] = response.xpath('//*[@id="price"]/text()').extract_first()
         stock_details = response.xpath('//*[@class="stock_details table table-hover table-striped table-theme"]//td/text()')
         
@@ -45,6 +46,6 @@ class KlseSpider(scrapy.Spider):
 
         yield result
 
-        # scrapy runspider klse_spider.py -o item.json 
+        # scrapy runspider tutorial/spiders/klse_spider.py -o item.json 
         # scrapy shell 'https://www.klsescreener.com/v2/stocks/view/7087'
         # git push https://fkxstyle@github.com/fkxstyle/klse.git
