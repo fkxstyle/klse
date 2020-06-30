@@ -1,19 +1,35 @@
+import os
 import scrapy
-
+import json
+import glob
 
 class KlseSpider(scrapy.Spider):
     name = "klse"
-
    
     def start_requests(self):
+        urls = []
 
-        urls = [
-            'https://www.klsescreener.com/v2/stocks/view/7087',
-            'https://www.klsescreener.com/v2/stocks/view/7088',
-            'https://www.klsescreener.com/v2/stocks/view/7089',
-            'https://www.klsescreener.com/v2/stocks/view/7090',
-            'https://www.klsescreener.com/v2/stocks/view/7091',
-        ]
+        # delete content in stocks.json
+        f = open('stocks.json', 'r+')
+        f.truncate(0)
+
+        # Take only first sector
+        sector_json_file_path = glob.glob('sector/*')[0]
+
+        # load json data
+        with open(sector_json_file_path) as json_file:
+            sector_stocks = json.load(json_file)
+        
+        # collect all urls
+        for sector_stock in sector_stocks:
+            urls.append(
+                'https://www.klsescreener.com/v2/stocks/view/{}'.format(sector_stock['stock_code'])
+            )
+        
+        # urls = [
+        #     'https://www.klsescreener.com/v2/stocks/view/7087',
+        # ]
+
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
 
@@ -36,7 +52,6 @@ class KlseSpider(scrapy.Spider):
         for stock_detail in stock_details:
 
             if extract == True:
-                print('kena')
                 result[found_data] = stock_detail.get()
                 extract = False
 
@@ -46,6 +61,6 @@ class KlseSpider(scrapy.Spider):
 
         yield result
 
-        # scrapy runspider tutorial/spiders/klse_spider.py -o item.json 
+        # scrapy runspider tutorial/spiders/klse_spider.py -o stocks.json 
         # scrapy shell 'https://www.klsescreener.com/v2/stocks/view/7087'
         # git push https://fkxstyle@github.com/fkxstyle/klse.git

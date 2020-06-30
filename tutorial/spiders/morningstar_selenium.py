@@ -4,6 +4,7 @@ import glob
 import unittest
 import time
 import json
+from pathlib import Path
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -13,22 +14,29 @@ from selenium.webdriver.support import expected_conditions as cond
 class MorningStar(unittest.TestCase):
 
     def setUp(self):
+        sector_root = Path().absolute()
         ## Configuration
-        self.download_path = "/Users/fookianxiong/Documents/Projects/klse/downloads/"
-        self.income_statement_xpath = '//*[@id="__layout"]/div/div[3]/main/div[2]/div/div/div[1]/sal-components/section/div/div/div/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[2]/div[1]/div[1]/a'
-        self.balance_sheet_xpath = '//*[@id="__layout"]/div/div[3]/main/div[2]/div/div/div[1]/sal-components/section/div/div/div/div/div[2]/div/div[1]/div[2]/div[2]/div/div[2]/div/div[2]/div[2]/div[2]/div[1]/a'
-        self.cash_flow_xpath = '//*[@id="__layout"]/div/div[3]/main/div[2]/div/div/div[1]/sal-components/section/div/div/div/div/div[2]/div/div[1]/div[2]/div[2]/div/div[2]/div/div[2]/div[2]/div[3]/div[1]/a'
+        self.download_path = os.path.join(sector_root,'downloads/')
+        self.restated_xpath = "//div[@class='sal-component-body']//sal-components-segment-band[@class='report-type']//mds-button[2]//label[1]//input[1]"
+        self.income_statement_xpath = "//div[@class='sal-tab-content ng-scope']//a[@class='mds-link ng-binding'][contains(text(),'Income Statement')]"
+        self.balance_sheet_xpath = "//div[@class='sal-tab-content ng-scope']//a[@class='mds-link ng-binding'][contains(text(),'Balance Sheet')]"
+        self.cash_flow_xpath = "//div[@class='sal-tab-content ng-scope']//a[@class='mds-link ng-binding'][contains(text(),'Cash Flow')]"
         self.export_excel_xpath = '//*[@id="__layout"]/div/div[3]/main/div[2]/div/div/div[1]/sal-components/section/div/div/div/div/div[2]/div/div[2]/div/div[2]/div/div[1]/div[4]/button'
         self.back_to_summary_xpath = '//*[@id="__layout"]/div/div[3]/main/div[2]/div/div/div[1]/sal-components/section/div/div/div/div/div[2]/div/div[2]/div/div[2]/div/div[2]/div[1]/h4/a'
 
+        self.json_file_path = 'stocks.json'
+
     def testExportExcel(self):
-        # Delete everything in downloads folder
+        # Delete all folders and files in downloads folder
         downloaded_files = glob.glob(self.download_path + '*')
-        for f in downloaded_files:
-            shutil.rmtree(f)
+        for fpath in downloaded_files:
+            if os.path.isdir(fpath):
+                shutil.rmtree(fpath)
+            elif os.path.isfile(fpath):
+                os.remove(fpath)
 
         # load json data
-        with open('tutorial/spiders/item.json') as json_file:
+        with open(self.json_file_path) as json_file:
             stocks = json.load(json_file)
 
         morningstar_url = 'https://www.morningstar.com/stocks/xkls/{}/financials'
@@ -63,10 +71,16 @@ class MorningStar(unittest.TestCase):
                 element.click()
                 time.sleep(3)
 
+            # Click Restated
+            element = browser.find_element_by_xpath(self.restated_xpath)
+            element.click()
+            time.sleep(3)
+
             # Click Income statement
             element = browser.find_element_by_xpath(self.income_statement_xpath)
             element.click()
             time.sleep(3)
+            
             # Click Export to excel
             element = browser.find_element_by_xpath(self.export_excel_xpath)
             element.click()
@@ -107,6 +121,9 @@ class MorningStar(unittest.TestCase):
             # move to stock folder
             for excel_file_path in excel_file_paths:
                 shutil.move(excel_file_path, self.download_path + stock['name'])
+
+        # move json file to downloads folder
+        # shutil.move(self.json_file_path, self.download_path)
 
 if __name__ == '__main__':
     unittest.main(verbosity=4)

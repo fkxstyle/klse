@@ -1,0 +1,8 @@
+scrapy
+selenium
+pytz
+requests
+randomcolor
+numpy
+pandas
+python-dateutil

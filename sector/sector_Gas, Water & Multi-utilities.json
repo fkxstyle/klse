@@ -1,0 +1,58 @@
+[
+    {
+        "company_name": "GAS MALAYSIA BERHAD",
+        "name": "GASMSIA",
+        "stock_code": "5209",
+        "market": "MAIN",
+        "sector": "Gas, Water & Multi-utilities"
+    },
+    {
+        "company_name": "PBA HOLDINGS BHD",
+        "name": "PBA",
+        "stock_code": "5041",
+        "market": "MAIN",
+        "sector": "Gas, Water & Multi-utilities"
+    },
+    {
+        "company_name": "PETRONAS GAS BERHAD",
+        "name": "PETGAS",
+        "stock_code": "6033",
+        "market": "MAIN",
+        "sector": "Gas, Water & Multi-utilities"
+    },
+    {
+        "company_name": "RANHILL HOLDINGS BERHAD",
+        "name": "RANHILL",
+        "stock_code": "5272",
+        "market": "MAIN",
+        "sector": "Gas, Water & Multi-utilities"
+    },
+    {
+        "company_name": "SALCON BERHAD",
+        "name": "SALCON",
+        "stock_code": "8567",
+        "market": "MAIN",
+        "sector": "Gas, Water & Multi-utilities"
+    },
+    {
+        "company_name": "TALIWORKS CORPORATION BERHAD",
+        "name": "TALIWRK",
+        "stock_code": "8524",
+        "market": "MAIN",
+        "sector": "Gas, Water & Multi-utilities"
+    },
+    {
+        "company_name": "YTL CORPORATION BERHAD",
+        "name": "YTL",
+        "stock_code": "4677",
+        "market": "MAIN",
+        "sector": "Gas, Water & Multi-utilities"
+    },
+    {
+        "company_name": "YTL POWER INTERNATIONAL BHD",
+        "name": "YTLPOWR",
+        "stock_code": "6742",
+        "market": "MAIN",
+        "sector": "Gas, Water & Multi-utilities"
+    }
+]
