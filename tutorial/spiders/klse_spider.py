@@ -34,10 +34,10 @@ class KlseSpider(scrapy.Spider):
             yield scrapy.Request(url=url, callback=self.parse)
 
     def parse(self, response):
-        selected_data = [
-            'Market Cap',
-            'DY',
-        ]
+        selected_data = {
+            'Market Cap': 'market_cap',
+            'DY': 'dividend_yield',
+        }
         result = {}
 
         name, code = response.xpath('//*[@class="col-lg-5"]/h1/text()').extract_first().replace(' ', '').split('(')
@@ -52,10 +52,11 @@ class KlseSpider(scrapy.Spider):
         for stock_detail in stock_details:
 
             if extract == True:
-                result[found_data] = stock_detail.get()
+                key_name = selected_data[found_data]
+                result[key_name] = stock_detail.get()
                 extract = False
 
-            if stock_detail.get() in selected_data:
+            if stock_detail.get() in selected_data.keys():
                 found_data = stock_detail.get()
                 extract = True
 
