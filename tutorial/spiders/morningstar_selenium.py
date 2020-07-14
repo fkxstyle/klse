@@ -73,46 +73,46 @@ class MorningStar(unittest.TestCase):
                 element.click()
                 time.sleep(3)
 
-            # # Click Restated
-            # element = browser.find_element_by_xpath(self.restated_xpath)
-            # element.click()
-            # time.sleep(3)
+            # Click Restated
+            element = browser.find_element_by_xpath(self.restated_xpath)
+            element.click()
+            time.sleep(3)
 
-            # # Click Income statement
-            # element = browser.find_element_by_xpath(self.income_statement_xpath)
-            # element.click()
-            # time.sleep(3)
+            # Click Income statement
+            element = browser.find_element_by_xpath(self.income_statement_xpath)
+            element.click()
+            time.sleep(3)
             
-            # # Click Export to excel
-            # element = browser.find_element_by_xpath(self.export_excel_xpath)
-            # element.click()
-            # time.sleep(3)
-            # # Click Back to Summary View
-            # element = browser.find_element_by_xpath(self.back_to_summary_xpath)
-            # element.click()
-            # time.sleep(3)
+            # Click Export to excel
+            element = browser.find_element_by_xpath(self.export_excel_xpath)
+            element.click()
+            time.sleep(3)
+            # Click Back to Summary View
+            element = browser.find_element_by_xpath(self.back_to_summary_xpath)
+            element.click()
+            time.sleep(3)
 
-            # # Click Balance Sheet
-            # element = browser.find_element_by_xpath(self.balance_sheet_xpath)
-            # element.click()
-            # time.sleep(3)
-            # # Click Export to excel
-            # element = browser.find_element_by_xpath(self.export_excel_xpath)
-            # element.click()
-            # time.sleep(3)
-            # # Click Back to Summary View
-            # element = browser.find_element_by_xpath(self.back_to_summary_xpath)
-            # element.click()
-            # time.sleep(3)
+            # Click Balance Sheet
+            element = browser.find_element_by_xpath(self.balance_sheet_xpath)
+            element.click()
+            time.sleep(3)
+            # Click Export to excel
+            element = browser.find_element_by_xpath(self.export_excel_xpath)
+            element.click()
+            time.sleep(3)
+            # Click Back to Summary View
+            element = browser.find_element_by_xpath(self.back_to_summary_xpath)
+            element.click()
+            time.sleep(3)
 
-            # # Click Cash Flow
-            # element = browser.find_element_by_xpath(self.cash_flow_xpath)
-            # element.click()
-            # time.sleep(3)
-            # # Click Export to excel
-            # element = browser.find_element_by_xpath(self.export_excel_xpath)
-            # element.click()
-            # time.sleep(6)
+            # Click Cash Flow
+            element = browser.find_element_by_xpath(self.cash_flow_xpath)
+            element.click()
+            time.sleep(3)
+            # Click Export to excel
+            element = browser.find_element_by_xpath(self.export_excel_xpath)
+            element.click()
+            time.sleep(6)
 
             # Go to Valuation 
             element = browser.find_element_by_xpath(self.valuation_xpath)
@@ -138,13 +138,13 @@ class MorningStar(unittest.TestCase):
             element.click()
             time.sleep(3)
 
-            stock['days_sales_outstanding'] = browser.find_element_by_xpath("/html[1]/body[1]/div[1]/div[1]/div[1]/div[3]/main[1]/div[2]/div[1]/div[1]/div[1]/sal-components[1]/section[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[1]/div[1]/table[1]/tbody[1]/tr[11]/td[11]/span[1]").text
-            stock['days_inventory'] = browser.find_element_by_xpath("/html[1]/body[1]/div[1]/div[1]/div[1]/div[3]/main[1]/div[2]/div[1]/div[1]/div[1]/sal-components[1]/section[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[1]/div[1]/table[1]/tbody[1]/tr[12]/td[11]/span[1]").text
-            stock['days_payables'] = browser.find_element_by_xpath("/html[1]/body[1]/div[1]/div[1]/div[1]/div[3]/main[1]/div[2]/div[1]/div[1]/div[1]/sal-components[1]/section[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[1]/div[1]/table[1]/tbody[1]/tr[13]/td[11]/span[1]").text
-            stock['receivable_turnover'] = browser.find_element_by_xpath("/html[1]/body[1]/div[1]/div[1]/div[1]/div[3]/main[1]/div[2]/div[1]/div[1]/div[1]/sal-components[1]/section[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[1]/div[1]/table[1]/tbody[1]/tr[14]/td[11]/span[1]").text
-            stock['inventory_turnover'] = browser.find_element_by_xpath("/html[1]/body[1]/div[1]/div[1]/div[1]/div[3]/main[1]/div[2]/div[1]/div[1]/div[1]/sal-components[1]/section[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[1]/div[1]/table[1]/tbody[1]/tr[15]/td[11]/span[1]").text
-            stock['fixed_asset_turnover'] = browser.find_element_by_xpath("/html[1]/body[1]/div[1]/div[1]/div[1]/div[3]/main[1]/div[2]/div[1]/div[1]/div[1]/sal-components[1]/section[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[1]/div[1]/table[1]/tbody[1]/tr[16]/td[11]/span[1]").text
-            stock['total_asset_turnover'] = browser.find_element_by_xpath("/html[1]/body[1]/div[1]/div[1]/div[1]/div[3]/main[1]/div[2]/div[1]/div[1]/div[1]/sal-components[1]/section[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[1]/div[1]/table[1]/tbody[1]/tr[17]/td[11]/span[1]").text
+            stock['days_sales_outstanding'] = browser.find_element_by_xpath("//tbody[1]/tr[11]/td[12]/span[1]").text
+            stock['days_inventory'] = browser.find_element_by_xpath("//tbody[1]/tr[12]/td[11]/span[1]").text
+            stock['days_payables'] = browser.find_element_by_xpath("//tbody[1]/tr[13]/td[11]/span[1]").text
+            stock['receivable_turnover'] = browser.find_element_by_xpath("//tbody[1]/tr[14]/td[11]/span[1]").text
+            stock['inventory_turnover'] = browser.find_element_by_xpath("//tbody[1]/tr[15]/td[11]/span[1]").text
+            stock['fixed_asset_turnover'] = browser.find_element_by_xpath("//tbody[1]/tr[16]/td[11]/span[1]").text
+            stock['total_asset_turnover'] = browser.find_element_by_xpath("//tbody[1]/tr[17]/td[11]/span[1]").text
 
             # Create directory for stock if not exist
             if not os.path.exists(self.download_path + stock['name']):
