@@ -48,7 +48,9 @@ cash_flow_columns = [
 ]
 income_statement_columns = [
     'Total Revenue',
+    'Total Operating Profit/Loss',
     'Diluted Net Income Available to Common Stockholders',
+    'Provision for Income Tax',
     'Pretax Income',
     'Net Interest Income/Expense',
     'Depreciation, Amortization and Depletion, Supplemental',
@@ -151,10 +153,10 @@ for company in company_list:
     stock_data['Dividend Per Share'] =  last_year_data['Cash Dividends Paid'] / last_year_data['Common Shares Outstanding']
     stock_data['Earning Per Share'] =  last_year_data['Diluted Net Income Available to Common Stockholders'] / last_year_data['Common Shares Outstanding']
     stock_data['Interest Bearing Debt'] =  stock_data['Total Debt']
-    # stock_data['Tax Rate'] =  last_year_data['Provision for Income Tax'] / last_year_data['Pretax Income']
-    # stock_data['NOPAT'] =  last_year_data['Total Operating Profit/Loss'] * (1 - stock_data['Tax Rate'])
-    # stock_data['Invested Capital'] =  stock_data['Interest Bearing Debt'] + last_year_data['Total Equity'] + last_year_data['Non-Controlling/Minority Interest'] - last_year_data['Cash, Cash Equivalents and Short Term Investments'] - last_year_data['Goodwill']
-    # stock_data['ROIC'] =  stock_data['NOPAT'] /  stock_data['Invested Capital']
+    stock_data['Tax Rate'] =  last_year_data['Provision for Income Tax'] / last_year_data['Pretax Income']
+    stock_data['NOPAT'] =  last_year_data['Total Operating Profit/Loss'] * (1 - stock_data['Tax Rate'])
+    stock_data['Invested Capital'] =  stock_data['Interest Bearing Debt'] + last_year_data['Total Equity'] + last_year_data['Non-Controlling/Minority Interest'] - last_year_data['Cash, Cash Equivalents and Short Term Investments'] - last_year_data['Goodwill']
+    stock_data['ROIC'] =  stock_data['NOPAT'] /  stock_data['Invested Capital']
 
 
     print(stock_data)

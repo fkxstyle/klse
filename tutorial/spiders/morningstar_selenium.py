@@ -18,11 +18,12 @@ class MorningStar(unittest.TestCase):
         ## Configuration
         self.download_path = os.path.join(sector_root,'downloads/')
         self.restated_xpath = "//div[@class='sal-component-body']//sal-components-segment-band[@class='report-type']//mds-button[2]//label[1]//input[1]"
+        self.more_financials_detail_data_xpath = "//a[@class='more-data mds-link']"
         self.income_statement_xpath = "//div[@class='sal-tab-content ng-scope']//a[@class='mds-link ng-binding'][contains(text(),'Income Statement')]"
         self.balance_sheet_xpath = "//div[@class='sal-tab-content ng-scope']//a[@class='mds-link ng-binding'][contains(text(),'Balance Sheet')]"
         self.cash_flow_xpath = "//div[@class='sal-tab-content ng-scope']//a[@class='mds-link ng-binding'][contains(text(),'Cash Flow')]"
         self.export_excel_xpath = '//*[@id="__layout"]/div/div[3]/main/div[2]/div/div/div[1]/sal-components/section/div/div/div/div/div[2]/div/div[2]/div/div[2]/div/div[1]/div[4]/button'
-        self.back_to_summary_xpath = '//*[@id="__layout"]/div/div[3]/main/div[2]/div/div/div[1]/sal-components/section/div/div/div/div/div[2]/div/div[2]/div/div[2]/div/div[2]/div[1]/h4/a'
+        self.back_to_summary_xpath = "//a[@class='mds-link']"
         self.valuation_xpath = "//a[contains(text(),'Valuation')]"
         self.operating_performance_xpath = "//a[contains(text(),'Operating Performance')]"
 
@@ -82,7 +83,10 @@ class MorningStar(unittest.TestCase):
             element = browser.find_element_by_xpath(self.income_statement_xpath)
             element.click()
             time.sleep(3)
-            
+            # Click More Financials Detail Data
+            element = browser.find_element_by_xpath(self.more_financials_detail_data_xpath)
+            element.click()
+            time.sleep(1)
             # Click Export to excel
             element = browser.find_element_by_xpath(self.export_excel_xpath)
             element.click()
@@ -96,6 +100,10 @@ class MorningStar(unittest.TestCase):
             element = browser.find_element_by_xpath(self.balance_sheet_xpath)
             element.click()
             time.sleep(3)
+            # Click More Financials Detail Data
+            element = browser.find_element_by_xpath(self.more_financials_detail_data_xpath)
+            element.click()
+            time.sleep(1)
             # Click Export to excel
             element = browser.find_element_by_xpath(self.export_excel_xpath)
             element.click()
@@ -109,6 +117,10 @@ class MorningStar(unittest.TestCase):
             element = browser.find_element_by_xpath(self.cash_flow_xpath)
             element.click()
             time.sleep(3)
+            # Click More Financials Detail Data
+            element = browser.find_element_by_xpath(self.more_financials_detail_data_xpath)
+            element.click()
+            time.sleep(1)
             # Click Export to excel
             element = browser.find_element_by_xpath(self.export_excel_xpath)
             element.click()
