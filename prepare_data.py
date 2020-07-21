@@ -17,6 +17,7 @@ from dateutil import tz
 from random import randint
 from decimal import Decimal
 from datetime import datetime
+import utils from .utils
 
 # define year
 now = datetime.now()
@@ -144,6 +145,10 @@ for company in company_list:
     company_data = company_data.apply(pd.to_numeric)
     last_year_data = company_data[last_year]
 
+    first_three_year = sorted(company_data.columns)[:3]
+    last_three_year = sorted(company_data.columns)[-3:]
+    all_years = company_data.columns
+
     # feed data to json
     stock_data['EBITDA'] = last_year_data['Pretax Income'] + last_year_data['Net Interest Income/Expense'] + last_year_data['Depreciation, Amortization and Depletion, Supplemental']
     stock_data['Book Value Per Share'] =  last_year_data['Total Equity'] / last_year_data['Common Shares Outstanding']
@@ -157,6 +162,17 @@ for company in company_list:
     stock_data['NOPAT'] =  last_year_data['Total Operating Profit/Loss'] * (1 - stock_data['Tax Rate'])
     stock_data['Invested Capital'] =  stock_data['Interest Bearing Debt'] + last_year_data['Total Equity'] + last_year_data['Non-Controlling/Minority Interest'] - last_year_data['Cash, Cash Equivalents and Short Term Investments'] - last_year_data['Goodwill']
     stock_data['ROIC'] =  stock_data['NOPAT'] /  stock_data['Invested Capital']
+    stock_data['Adequate size of enterprise (Market Cap) (RM mil)'] = string_value_converter(stock_data['market_cap'].replace(",", ""))
+    stock_data['2 x Current asset >= Current liabilities'] = last_year_data['Total Current Assets'] / last_year_data['Total Current Liabilities'] > 2
+    stock_data['Net current asset (working capital) > long term debt'] = stock_data['Working Capital'] > last_year_data['Long Term Debt and Capital Lease Obligation']
+    stock_data['Debt < 2 x Stock Equity (book value)'] = last_year_data['Total Liabilities'] < 2 * last_year_data['Total Equity']
+    # stock_data['Earning stability in the past 10 years (EPS)']
+    stock_data['Dividend uninterupted for past 20 years'] = (company_data.loc['Cash Dividends Paid'] != 0 ).all()
+    stock_data['Min. inc of 1/3 using three year averages at beginning & end'] = abs(company_data.loc['Cash Dividends Paid', last_three_year].sum()) / abs(company_data.loc['Cash Dividends Paid', first_three_year].sum()) - 1 > 1/3
+    stock_data['P/E < 15 average earnings of past three years'] = (float(stock_data['current_pe_ratio'])+float(stock_data['last_year_pe_ratio'])+float(stock_data['last_2_years_pe_ratio'])) / 3 < 15
+    stock_data['Price < 1.5 x Book value'] = float(stock_data['price']) < 1.5*float(stock_data['Book Value Per Share'])
+    stock_data['P/E * P/NTA < 22.5'] = float(stock_data['current_pe_ratio']) * float(stock_data['price']) / stock_data['Net Tangible Book Value Per Share'] < 22.5
+
 
 
     print(stock_data)
