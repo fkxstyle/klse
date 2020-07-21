@@ -1,6 +1,7 @@
 *.zip
 __pycache__
 /__pycache__
+/.ipynb_checkpoints
 __pycache__/
 .coverage
 .tox/
@@ -9,6 +10,7 @@ __pycache__/
 .DS_Store
 _build/
 venv
+klse_env
 venv36
 .idea
 .cpython-36.pyc
