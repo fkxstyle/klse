@@ -6,3 +6,4 @@ randomcolor
 numpy
 pandas
 python-dateutil
+xlrd
