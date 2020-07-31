@@ -150,13 +150,13 @@ class MorningStar(unittest.TestCase):
             element.click()
             time.sleep(3)
 
-            stock['days_sales_outstanding'] = browser.find_element_by_xpath("//tbody[1]/tr[11]/td[12]/span[1]").text
-            stock['days_inventory'] = browser.find_element_by_xpath("//tbody[1]/tr[12]/td[11]/span[1]").text
-            stock['days_payables'] = browser.find_element_by_xpath("//tbody[1]/tr[13]/td[11]/span[1]").text
-            stock['receivable_turnover'] = browser.find_element_by_xpath("//tbody[1]/tr[14]/td[11]/span[1]").text
-            stock['inventory_turnover'] = browser.find_element_by_xpath("//tbody[1]/tr[15]/td[11]/span[1]").text
-            stock['fixed_asset_turnover'] = browser.find_element_by_xpath("//tbody[1]/tr[16]/td[11]/span[1]").text
-            stock['total_asset_turnover'] = browser.find_element_by_xpath("//tbody[1]/tr[17]/td[11]/span[1]").text
+            stock['Day Sales Outstanding'] = browser.find_element_by_xpath("//tbody[1]/tr[11]/td[12]/span[1]").text
+            stock['Days Inventory'] = browser.find_element_by_xpath("//tbody[1]/tr[12]/td[11]/span[1]").text
+            stock['Days Payables'] = browser.find_element_by_xpath("//tbody[1]/tr[13]/td[11]/span[1]").text
+            stock['Receivable Turnover'] = browser.find_element_by_xpath("//tbody[1]/tr[14]/td[11]/span[1]").text
+            stock['Inventory Turnover'] = browser.find_element_by_xpath("//tbody[1]/tr[15]/td[11]/span[1]").text
+            stock['Fixed Asset Turnover'] = browser.find_element_by_xpath("//tbody[1]/tr[16]/td[11]/span[1]").text
+            stock['Total Asset Turnover'] = browser.find_element_by_xpath("//tbody[1]/tr[17]/td[11]/span[1]").text
 
             # Create directory for stock if not exist
             if not os.path.exists(self.download_path + stock['name']):

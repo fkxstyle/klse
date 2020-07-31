@@ -194,15 +194,6 @@ for company in company_list:
     stock_data['Return on Assets'] = last_year_data['Diluted Net Income Available to Common Stockholders'] /  last_year_data['Total Assets']
     stock_data['Return on Equity'] = last_year_data['Diluted Net Income Available to Common Stockholders'] /  last_year_data['Total Equity']
     
-    # Operating Performance:
-    stock_data['Day Sales Outstanding'] = last_year_data['Trade/Accounts Receivable, Current'] / last_year_data['Total Revenue'] * 365
-    # stock_data['Days Inventory'] = ( (last_year_data['Inventories']  + last_2_year_data['Inventories']) / 2) / Cost of Revenues * 365
-    # stock_data['Days Payables'] = last_year_data['Trade/Accounts Payable, Current'] * 365 DIVIDED BY Cost of Revenues
-    stock_data['Receivable Turnover'] = last_year_data['Total Revenue'] / ((last_year_data['Trade/Accounts Receivable, Current'] + last_2_year_data['Trade/Accounts Receivable, Current']) / 2)
-    stock_data['Inventory Turnover'] = last_year_data['Total Revenue'] / ((last_year_data['Inventories'] + last_2_year_data['Inventories']) / 2) 
-    # stock_data['Fixed Asset Turnover'] = last_year_data['Diluted Net Income Available to Common Stockholders'] / [(Net Property, Plant and Equipment (nth year) + Net Property, Plant and Equipment (n-1th year)]/2)
-    stock_data['Total Asset Turnover'] = last_year_data['Total Revenue'] / ((last_year_data['Total Assets'] + last_2_year_data['Total Assets']) / 2)
-
     import pprint
     pp = pprint.PrettyPrinter(indent=4)
     pp.pprint(stock_data)
