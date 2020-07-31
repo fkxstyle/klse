@@ -17,12 +17,14 @@ from dateutil import tz
 from random import randint
 from decimal import Decimal
 from datetime import datetime
-import utils from .utils
+from utils import string_value_converter 
+
 
 # define year
 now = datetime.now()
 this_year = str(now.year)
 last_year = str(now.year - 1)
+last_2_year = str(now.year - 2)
 
 # define columns for each document
 balance_sheet_columns = [
@@ -144,6 +146,7 @@ for company in company_list:
     company_data = company_data.apply(lambda x: x.str.replace(',','')).fillna(0)
     company_data = company_data.apply(pd.to_numeric)
     last_year_data = company_data[last_year]
+    last_2_year_data = company_data[last_2_year]
 
     first_three_year = sorted(company_data.columns)[:3]
     last_three_year = sorted(company_data.columns)[-3:]
@@ -175,7 +178,35 @@ for company in company_list:
 
 
 
-    print(stock_data)
+    # Ratios:
+    stock_data['P/book value'] = float(stock_data['price']) / stock_data['Book Value Per Share']
+    stock_data['Net/sales'] = last_year_data['Diluted Net Income Available to Common Stockholders'] / last_year_data['Total Revenue']
+    stock_data['Earning/book value'] = last_year_data['Diluted Net Income Available to Common Stockholders'] / stock_data['Net Tangible Book Value Per Share']
+    stock_data['Working capital/ debt'] = stock_data['Working Capital'] / ( last_year_data['Long Term Debt and Capital Lease Obligation'] + last_year_data['Current Debt and Capital Lease Obligation'])
+    stock_data['(Year, n=10) versus (Year, n=5)'] = (company_data[all_years[-1]]['Diluted Net Income Available to Common Stockholders'] / company_data[all_years[0]]['Diluted Net Income Available to Common Stockholders']) - 1
+
+    # Financial Health:
+    stock_data['Quick Ratio'] = (last_year_data['Cash, Cash Equivalents and Short Term Investments'] + last_year_data['Trade and Other Receivables, Current']) / last_year_data['Total Current Liabilities']
+    stock_data['Interest Coverage'] = last_year_data['Net Interest Income/Expense'] / stock_data['EBITDA']
+    stock_data['Debt/ Equity'] = last_year_data['Total Liabilities'] / last_year_data['Total Equity']
+
+    # Profitability:
+    stock_data['Return on Assets'] = last_year_data['Diluted Net Income Available to Common Stockholders'] /  last_year_data['Total Assets']
+    stock_data['Return on Equity'] = last_year_data['Diluted Net Income Available to Common Stockholders'] /  last_year_data['Total Equity']
+    
+    # Operating Performance:
+    stock_data['Day Sales Outstanding'] = last_year_data['Trade/Accounts Receivable, Current'] / last_year_data['Total Revenue'] * 365
+    # stock_data['Days Inventory'] = ( (last_year_data['Inventories']  + last_2_year_data['Inventories']) / 2) / Cost of Revenues * 365
+    # stock_data['Days Payables'] = last_year_data['Trade/Accounts Payable, Current'] * 365 DIVIDED BY Cost of Revenues
+    stock_data['Receivable Turnover'] = last_year_data['Total Revenue'] / ((last_year_data['Trade/Accounts Receivable, Current'] + last_2_year_data['Trade/Accounts Receivable, Current']) / 2)
+    stock_data['Inventory Turnover'] = last_year_data['Total Revenue'] / ((last_year_data['Inventories'] + last_2_year_data['Inventories']) / 2) 
+    # stock_data['Fixed Asset Turnover'] = last_year_data['Diluted Net Income Available to Common Stockholders'] / [(Net Property, Plant and Equipment (nth year) + Net Property, Plant and Equipment (n-1th year)]/2)
+    stock_data['Total Asset Turnover'] = last_year_data['Total Revenue'] / ((last_year_data['Total Assets'] + last_2_year_data['Total Assets']) / 2)
+
+    import pprint
+    pp = pprint.PrettyPrinter(indent=4)
+    pp.pprint(stock_data)
+    pp.pprint(company_data)
 #     company_data.to_excel(writer, sheet_name=company)
 
 # writer.save()
