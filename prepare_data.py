@@ -18,6 +18,7 @@ from random import randint
 from decimal import Decimal
 from datetime import datetime
 from utils import string_value_converter 
+import xlsxwriter
 
 # define constant
 million = 1000000
@@ -80,38 +81,23 @@ for fpath in ds_store_path:
 indexes = balance_sheet_columns + cash_flow_columns + income_statement_columns
 company_list=os.listdir (company_folder_root)
 
-# initialize excel writer engine
-writer = pd.ExcelWriter('financial_data.xlsx', engine='xlsxwriter')
+# Create an new Excel file and add a worksheet.
+workbook = xlsxwriter.Workbook('financial_data.xlsx')
+worksheet = workbook.add_worksheet()
 
-# prepare dataframe for data availability
-company_data_availability = pd.DataFrame(index=indexes, columns=company_list)
-for company in company_list:
-    company_dir = os.path.join(company_folder_root, company)
-    document_list = os.listdir(company_dir)
-    for document in document_list:
-        document_dir =  os.path.join(company_dir,document)
-        if 'Balance Sheet' in document:
-            df_bs = pd.read_excel(document_dir,sheet_name='sheet1').fillna(0)
-            df_bs['Name'] = df_bs['Name'].str.lstrip().str.rstrip()
-            df_bs = df_bs.set_index('Name')
-            df_bs_column = pd.DataFrame(index=balance_sheet_columns)
-            df_bs_column[company] = df_bs_column.index.map(lambda x: x in df_bs.index)
-        elif 'Cash Flow' in document:
-            df_cf = pd.read_excel(document_dir,sheet_name='sheet1').fillna(0)
-            df_cf['Name'] = df_cf['Name'].str.lstrip().str.rstrip()
-            df_cf = df_cf.set_index('Name')
-            df_cf_column = pd.DataFrame(index=cash_flow_columns)
-            df_cf_column[company] = df_cf_column.index.map(lambda x: x in df_cf.index) 
-        elif 'Income Statement' in document:
-            df_is = pd.read_excel(document_dir,sheet_name='sheet1').fillna(0)
-            df_is['Name'] = df_is['Name'].str.lstrip().str.rstrip()
-            df_is = df_is.set_index('Name')
-            df_is_column = pd.DataFrame(index=income_statement_columns)
-            df_is_column[company] = df_is_column.index.map(lambda x: x in df_is.index)
-    company_data_availability[company] = pd.concat([df_bs_column, df_cf_column, df_is_column])
-company_data_availability = company_data_availability.reindex(indexes)
+count = 1
+# Write first column in excel
+with open('excel_output.json') as json_file:
+    excel_output = json.load(json_file)
+for category, key_names in excel_output.items():
+    worksheet.write(count, 0, category)
+    count += 1
+    for key_name in key_names:
+        worksheet.write(count, 0, key_name)
+        count += 1
+    count += 1
+column_index = 1
 
-company_data_availability.to_excel(writer, sheet_name='data')
 
 # prepare dataframe for data of each company in the folder
 for company in company_list:
@@ -122,25 +108,32 @@ for company in company_list:
     with open(company_dir + '/data.json') as json_file:
         stock_data = json.load(json_file)
 
+    print('jimmy')
+    print(stock_data['name'])
+
     # build data frame from excel file
     for document in document_list:
         document_dir =  os.path.join(company_dir,document)
         if 'Balance Sheet' in document:
-            df_bs = pd.read_excel(document_dir,sheet_name='sheet1').fillna(0)
-            df_bs['Name'] = df_bs['Name'].str.lstrip().str.rstrip()
-            df_bs = df_bs.set_index('Name')
+            key_name = '{}_BalanceSheet_Annual_Restated'.format(stock_data['code'])
+            df_bs = pd.read_excel(document_dir,sheet_name=stock_data['code']).fillna(0)
+            
+            df_bs[key_name] = df_bs[key_name].str.lstrip().str.rstrip()
+            df_bs = df_bs.set_index(key_name)
             df_bs_filtered = df_bs.reindex(balance_sheet_columns).loc[balance_sheet_columns].fillna(0)
 
         elif 'Cash Flow' in document:
-            df_cf = pd.read_excel(document_dir,sheet_name='sheet1').fillna(0)
-            df_cf['Name'] = df_cf['Name'].str.lstrip().str.rstrip()
-            df_cf = df_cf.set_index('Name')
+            key_name = '{}_CashFlow_Annual_Restated'.format(stock_data['code'])
+            df_cf = pd.read_excel(document_dir,sheet_name=stock_data['code']).fillna(0)
+            df_cf[key_name] = df_cf[key_name].str.lstrip().str.rstrip()
+            df_cf = df_cf.set_index(key_name)
             df_cf_filtered = df_cf.reindex(cash_flow_columns).loc[cash_flow_columns].fillna(0)
                     
         elif 'Income Statement' in document:
-            df_is = pd.read_excel(document_dir,sheet_name='sheet1').fillna(0)
-            df_is['Name'] = df_is['Name'].str.lstrip().str.rstrip()
-            df_is = df_is.set_index('Name')
+            key_name = '{}_IncomeStatement_Annual_Restated'.format(stock_data['code'])
+            df_is = pd.read_excel(document_dir,sheet_name=stock_data['code']).fillna(0)
+            df_is[key_name] = df_is[key_name].str.lstrip().str.rstrip()
+            df_is = df_is.set_index(key_name)
             df_is_filtered = df_is.reindex(income_statement_columns).loc[income_statement_columns].fillna(0)
         
     company_data = pd.concat([df_bs_filtered, df_cf_filtered, df_is_filtered], sort=False)
@@ -182,24 +175,6 @@ for company in company_list:
     stock_data['Price < 1.5 x Book value'] = float(stock_data['price']) < 1.5*float(stock_data['Book Value Per Share'])
     stock_data['P/E * P/NTA < 22.5'] = float(stock_data['current_pe_ratio']) * float(stock_data['price']) / stock_data['Net Tangible Book Value Per Share'] < 22.5
 
-
-
-    # Ratios:
-    stock_data['P/book value'] = float(stock_data['price']) / stock_data['Book Value Per Share']
-    stock_data['Net/sales'] = last_year_data['Diluted Net Income Available to Common Stockholders'] / last_year_data['Total Revenue']
-    stock_data['Earning/book value'] = last_year_data['Diluted Net Income Available to Common Stockholders'] / stock_data['Net Tangible Book Value Per Share']
-    stock_data['Working capital/ debt'] = stock_data['Working Capital'] / ( last_year_data['Long Term Debt and Capital Lease Obligation'] + last_year_data['Current Debt and Capital Lease Obligation'])
-    stock_data['(Year, n=10) versus (Year, n=5)'] = (company_data[all_years[-1]]['Diluted Net Income Available to Common Stockholders'] / company_data[all_years[0]]['Diluted Net Income Available to Common Stockholders']) - 1
-
-    # Financial Health:
-    stock_data['Quick Ratio'] = (last_year_data['Cash, Cash Equivalents and Short Term Investments'] + last_year_data['Trade and Other Receivables, Current']) / last_year_data['Total Current Liabilities']
-    stock_data['Interest Coverage'] = last_year_data['Net Interest Income/Expense'] / stock_data['EBITDA']
-    stock_data['Debt/ Equity'] = last_year_data['Total Liabilities'] / last_year_data['Total Equity']
-
-    # Profitability:
-    stock_data['Return on Assets'] = last_year_data['Diluted Net Income Available to Common Stockholders'] /  last_year_data['Total Assets']
-    stock_data['Return on Equity'] = last_year_data['Diluted Net Income Available to Common Stockholders'] /  last_year_data['Total Equity']
-
     # Stockaholics method:
     stock_data['ROE > 10%'] = last_year_data['Diluted Net Income Available to Common Stockholders'] / last_year_data['Total Equity'] > 0.1
     stock_data['Net cash companies (RM mil)'] = last_year_data['Cash, Cash Equivalents and Short Term Investments']
@@ -212,7 +187,7 @@ for company in company_list:
     stock_data['ROIC > ROE'] = stock_data['ROIC'] > last_year_data['Diluted Net Income Available to Common Stockholders'] / last_year_data['Total Equity']
 
     # Comparison Method 2: Benjamin Graham
-    stock_data[f"price, {today_date}"] = float(stock_data['price'])
+    stock_data["Price"] = float(stock_data['price'])
     stock_data['Number of share of common (mil)'] = last_year_data['Common Shares Outstanding'] / million
     stock_data['Market value of common (RM mil)'] = string_value_converter(stock_data['market_cap'].replace(',','')) / million
     stock_data['Debt (RM mil)'] = (last_year_data['Current Debt and Capital Lease Obligation'] + last_year_data['Long Term Debt and Capital Lease Obligation']) / million
@@ -220,16 +195,55 @@ for company in company_list:
     stock_data['Book value per share'] = stock_data['Net Tangible Book Value Per Share']
     stock_data['Sales (RM mil)'] = last_year_data['Total Revenue'] / million
     stock_data['Net income'] = last_year_data['Diluted Net Income Available to Common Stockholders']
-    stock_data[f"EPS (Year, n={last_year})"] = last_year_data['Diluted Net Income Available to Common Stockholders'] / last_year_data['Common Shares Outstanding']
-    stock_data[f"EPS (Year, n={last_2_year})"] = last_2_year_data['Diluted Net Income Available to Common Stockholders'] / last_2_year_data['Common Shares Outstanding']
-    stock_data[f"EPS (Year, n={last_3_year})"] = last_3_year_data['Diluted Net Income Available to Common Stockholders'] / last_3_year_data['Common Shares Outstanding']
+    stock_data["EPS (Year, n=10)"] = last_year_data['Diluted Net Income Available to Common Stockholders'] / last_year_data['Common Shares Outstanding']
+    stock_data["EPS (Year, n=9)"] = last_2_year_data['Diluted Net Income Available to Common Stockholders'] / last_2_year_data['Common Shares Outstanding']
+    stock_data["EPS (Year, n=8)"] = last_3_year_data['Diluted Net Income Available to Common Stockholders'] / last_3_year_data['Common Shares Outstanding']
     stock_data['Current dividend rate'] = string_value_converter(stock_data['dividend_yield'])
+
+    # Ratios:
+    stock_data['P/E'] = stock_data['last_year_pe_ratio']
+    stock_data['P/book value'] = float(stock_data['price']) / stock_data['Book Value Per Share']
+    stock_data['Dividend yield'] = stock_data['dividend_yield']
+    stock_data['Net/sales'] = last_year_data['Diluted Net Income Available to Common Stockholders'] / last_year_data['Total Revenue']
+    stock_data['Earning/book value'] = last_year_data['Diluted Net Income Available to Common Stockholders'] / stock_data['Net Tangible Book Value Per Share']
+    stock_data['Current assets/ liabilities'] = last_year_data['Total Current Assets'] / last_year_data['Total Current Liabilities']
+    stock_data['Working capital/ debt'] = stock_data['Working Capital'] / ( last_year_data['Long Term Debt and Capital Lease Obligation'] + last_year_data['Current Debt and Capital Lease Obligation'])
+    stock_data['(Year, n=10) versus (Year, n=5)'] = (company_data[all_years[-1]]['Diluted Net Income Available to Common Stockholders'] / company_data[all_years[0]]['Diluted Net Income Available to Common Stockholders']) - 1
+
+    # Financial Health:
+    stock_data['Quick Ratio'] = (last_year_data['Cash, Cash Equivalents and Short Term Investments'] + last_year_data['Trade and Other Receivables, Current']) / last_year_data['Total Current Liabilities']
+    stock_data['Current Ratio'] = last_year_data['Total Current Assets'] / last_year_data['Total Current Liabilities']
+    stock_data['Interest Coverage'] = last_year_data['Net Interest Income/Expense'] / stock_data['EBITDA']
+    stock_data['Debt/ Equity'] = last_year_data['Total Liabilities'] / last_year_data['Total Equity']
+
+    # Profitability:
+    stock_data['Return on Assets'] = last_year_data['Diluted Net Income Available to Common Stockholders'] /  last_year_data['Total Assets']
+    stock_data['Return on Equity'] = last_year_data['Diluted Net Income Available to Common Stockholders'] /  last_year_data['Total Equity']
+    stock_data['Return on Invested Capital'] = stock_data['ROIC']
+    stock_data['Net Margin'] = stock_data['Net/sales']
+
     
+    # -- Print output yoo --
     import pprint
     pp = pprint.PrettyPrinter(indent=4)
     pp.pprint(stock_data)
     pp.pprint(company_data)
-#     company_data.to_excel(writer, sheet_name=company)
 
-# writer.save()
+    # Write data to excel
+    # print(stock_data['name'])
+
+    worksheet.write(0, column_index, stock_data['name'])
+    row_index = 1
+    for category, key_names in excel_output.items():
+        row_index += 1
+        for key_name in key_names:
+            if key_name in stock_data.keys():
+                worksheet.write(row_index, column_index, stock_data[key_name])
+            row_index += 1
+        row_index += 1
+    column_index += 1
+
+workbook.close()
+
+
 

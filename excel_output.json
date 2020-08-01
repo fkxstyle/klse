@@ -1,0 +1,80 @@
+{
+    "Benjamin Graham Method - Defensive": [
+        "Adequate size of enterprise (Market Cap) (RM mil)",
+        "A sufficiently strong financial condition",
+        "2 x Current asset >= Current liabilities",
+        "Net current asset (working capital) > long term debt",
+        "Public Utilities company only",
+        "Debt < 2 x Stock Equity (book value)",
+        "Earning stability in the past 10 years (EPS)",
+        "Dividend uninterupted for past 20 years ",
+        "Earning growth in past 10 years",
+        "Min. inc of 1/3 using three year averages at beginning & end",
+        "Moderate Price/ Earnings ratio",
+        "P/E < 15 average earnings of past three years",
+        "Moderate ratio of price to assets",
+        "Price < 1.5 x Book value",
+        "P/E * P/NTA < 22.5"
+    ],
+    "Stockaholics Method": [
+        "ROE > 10%",
+        "Net cash companies (RM mil)",
+        "Companies with good FCF (RM mil)",
+        "Dividend Pay-out ratio ≤ 75%",
+        "Dividend Yield ≥ 10-year Malaysia Government Bond (3.43%)"
+    ],
+    "Adam Khoo": [
+        "3 years x Net income > Long term debt"
+    ],
+    "Online Sources": [
+        "ROIC > ROE",
+        "ROIC > WACC"
+    ],
+    "Comparison Method 2 - Benjamin Graham": [
+        "Price",
+        "Number of share of common (mil)",
+        "Market value of common (RM mil)",
+        "Debt (RM mil)",
+        "Total capitalization at market",
+        "Book value per share",
+        "Sales",
+        "Net income",
+        "EPS (Year, n=10)",
+        "EPS (Year, n=9)",
+        "EPS (Year, n=8)",
+        "Current dividend rate"
+    ],
+    "Ratios": [
+        "P/E",
+        "P/book value",
+        "Dividend yield",
+        "Net/sales",
+        "Earning/book value",
+        "Current assets/ liabilities",
+        "Working capital/ debt",
+        "Growth in per-share earnings",
+        "(Year, n=10) versus (Year, n=5)",
+        "(Year, n=10) versus (Year, n=1)"
+    ],
+    "Financial Health": [
+        "Quick Ratio",
+        "Current Ratio",
+        "Interest Coverage",
+        "Debt/ Equity"
+    ],
+    "Profitability": [
+        "Return on Assets",
+        "Return on Equity",
+        "Return on Invested Capital",
+        "Net Margin"
+    ],
+    "Operating Performance": [
+        "Day Sales Outstanding",
+        "Days Inventory",
+        "Days Payables",
+        "Receivable Turnover",
+        "Inventory Turnover",
+        "Fixed Asset Turnover",
+        "Total Asset Turnover"
+    ]
+}
