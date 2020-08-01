@@ -1,5 +1,5 @@
 import os
-from datetime import datetime
+from datetime import datetime, date
 import re
 import pytz
 import time
@@ -19,12 +19,17 @@ from decimal import Decimal
 from datetime import datetime
 from utils import string_value_converter 
 
+# define constant
+million = 1000000
+malaysia_government_bond_rate = 3.43
 
 # define year
 now = datetime.now()
+today_date = date.today()
 this_year = str(now.year)
 last_year = str(now.year - 1)
 last_2_year = str(now.year - 2)
+last_3_year = str(now.year -3)
 
 # define columns for each document
 balance_sheet_columns = [
@@ -147,6 +152,7 @@ for company in company_list:
     company_data = company_data.apply(pd.to_numeric)
     last_year_data = company_data[last_year]
     last_2_year_data = company_data[last_2_year]
+    last_3_year_data = company_data[last_3_year]
 
     first_three_year = sorted(company_data.columns)[:3]
     last_three_year = sorted(company_data.columns)[-3:]
@@ -193,6 +199,31 @@ for company in company_list:
     # Profitability:
     stock_data['Return on Assets'] = last_year_data['Diluted Net Income Available to Common Stockholders'] /  last_year_data['Total Assets']
     stock_data['Return on Equity'] = last_year_data['Diluted Net Income Available to Common Stockholders'] /  last_year_data['Total Equity']
+
+    # Stockaholics method:
+    stock_data['ROE > 10%'] = last_year_data['Diluted Net Income Available to Common Stockholders'] / last_year_data['Total Equity'] > 0.1
+    stock_data['Net cash companies (RM mil)'] = last_year_data['Cash, Cash Equivalents and Short Term Investments']
+    stock_data['Companies with good FCF (RM mil)'] = last_year_data['Cash Flow from Operating Activities, Indirect'] - abs(last_year_data['Purchase of Property, Plant and Equipment'])
+    stock_data['Dividend Pay-out ratio ≤ 75%'] = abs(stock_data['Dividend Per Share']) / abs(stock_data['Earning Per Share']) < 0.75
+    stock_data['Dividend Yield ≥ 10-year Malaysia Government Bond (3.43%)'] = string_value_converter(stock_data['dividend_yield']) >= malaysia_government_bond_rate
+
+    # adam khoo
+    stock_data['3 years x Net income > Long term debt'] = last_year_data['Diluted Net Income Available to Common Stockholders'] / last_year_data['Long Term Debt and Capital Lease Obligation'] > (1/3)
+    stock_data['ROIC > ROE'] = stock_data['ROIC'] > last_year_data['Diluted Net Income Available to Common Stockholders'] / last_year_data['Total Equity']
+
+    # Comparison Method 2: Benjamin Graham
+    stock_data[f"price, {today_date}"] = float(stock_data['price'])
+    stock_data['Number of share of common (mil)'] = last_year_data['Common Shares Outstanding'] / million
+    stock_data['Market value of common (RM mil)'] = string_value_converter(stock_data['market_cap'].replace(',','')) / million
+    stock_data['Debt (RM mil)'] = (last_year_data['Current Debt and Capital Lease Obligation'] + last_year_data['Long Term Debt and Capital Lease Obligation']) / million
+    stock_data['Total capitalization at market (RM mil)'] = stock_data['Market value of common (RM mil)'] + stock_data['Debt (RM mil)']
+    stock_data['Book value per share'] = stock_data['Net Tangible Book Value Per Share']
+    stock_data['Sales (RM mil)'] = last_year_data['Total Revenue'] / million
+    stock_data['Net income'] = last_year_data['Diluted Net Income Available to Common Stockholders']
+    stock_data[f"EPS (Year, n={last_year})"] = last_year_data['Diluted Net Income Available to Common Stockholders'] / last_year_data['Common Shares Outstanding']
+    stock_data[f"EPS (Year, n={last_2_year})"] = last_2_year_data['Diluted Net Income Available to Common Stockholders'] / last_2_year_data['Common Shares Outstanding']
+    stock_data[f"EPS (Year, n={last_3_year})"] = last_3_year_data['Diluted Net Income Available to Common Stockholders'] / last_3_year_data['Common Shares Outstanding']
+    stock_data['Current dividend rate'] = string_value_converter(stock_data['dividend_yield'])
     
     import pprint
     pp = pprint.PrettyPrinter(indent=4)
