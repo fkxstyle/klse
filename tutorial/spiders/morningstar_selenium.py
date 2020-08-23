@@ -18,10 +18,10 @@ class MorningStar(unittest.TestCase):
         ## Configuration
         self.download_path = os.path.join(sector_root,'downloads/')
         self.restated_xpath = "//div[@class='sal-component-body']//sal-components-segment-band[@class='report-type']//mds-button[2]//label[1]//input[1]"
-        self.more_financials_detail_data_xpath = "//a[@class='more-data mds-link']"
-        self.income_statement_xpath = "//div[@class='sal-tab-content ng-scope']//a[@class='mds-link ng-binding'][contains(text(),'Income Statement')]"
-        self.balance_sheet_xpath = "//div[@class='sal-tab-content ng-scope']//a[@class='mds-link ng-binding'][contains(text(),'Balance Sheet')]"
-        self.cash_flow_xpath = "//div[@class='sal-tab-content ng-scope']//a[@class='mds-link ng-binding'][contains(text(),'Cash Flow')]"
+        self.more_financials_detail_data_xpath = "//span[contains(text(),'More Financials Detail Data')]"
+        self.income_statement_xpath = "//div[@class='sal-tab-content ng-scope']//a[@class='mds-link ng-binding ng-scope'][contains(text(),'Income Statement')]"
+        self.balance_sheet_xpath = "//div[@class='sal-tab-content ng-scope']//a[@class='mds-link ng-binding ng-scope'][contains(text(),'Balance Sheet')]"
+        self.cash_flow_xpath = "//div[@class='sal-tab-content ng-scope']//a[@class='mds-link ng-binding ng-scope'][contains(text(),'Cash Flow')]"
         self.export_excel_xpath = '//*[@id="__layout"]/div/div[3]/main/div[2]/div/div/div[1]/sal-components/section/div/div/div/div/div[2]/div/div[2]/div/div[2]/div/div[1]/div[4]/button'
         self.back_to_summary_xpath = "//a[@class='mds-link']"
         self.valuation_xpath = "//a[contains(text(),'Valuation')]"
@@ -150,7 +150,7 @@ class MorningStar(unittest.TestCase):
             element.click()
             time.sleep(3)
 
-            stock['Day Sales Outstanding'] = browser.find_element_by_xpath("//tbody[1]/tr[11]/td[12]/span[1]").text
+            stock['Day Sales Outstanding'] = browser.find_element_by_xpath("//tbody[1]/tr[11]/td[11]/span[1]").text
             stock['Days Inventory'] = browser.find_element_by_xpath("//tbody[1]/tr[12]/td[11]/span[1]").text
             stock['Days Payables'] = browser.find_element_by_xpath("//tbody[1]/tr[13]/td[11]/span[1]").text
             stock['Receivable Turnover'] = browser.find_element_by_xpath("//tbody[1]/tr[14]/td[11]/span[1]").text

@@ -205,7 +205,7 @@ for company in company_list:
     stock_data['P/book value'] = float(stock_data['price']) / stock_data['Book Value Per Share']
     stock_data['Dividend yield'] = stock_data['dividend_yield']
     stock_data['Net/sales'] = last_year_data['Diluted Net Income Available to Common Stockholders'] / last_year_data['Total Revenue']
-    stock_data['Earning/book value'] = last_year_data['Diluted Net Income Available to Common Stockholders'] / stock_data['Net Tangible Book Value Per Share']
+    stock_data['Earning/book value'] = last_year_data['Diluted Net Income Available to Common Stockholders'] / (stock_data['Net Tangible Book Value Per Share'] * last_year_data['Common Shares Outstanding'])
     stock_data['Current assets/ liabilities'] = last_year_data['Total Current Assets'] / last_year_data['Total Current Liabilities']
     stock_data['Working capital/ debt'] = stock_data['Working Capital'] / ( last_year_data['Long Term Debt and Capital Lease Obligation'] + last_year_data['Current Debt and Capital Lease Obligation'])
     stock_data['(Year, n=10) versus (Year, n=5)'] = (company_data[all_years[-1]]['Diluted Net Income Available to Common Stockholders'] / company_data[all_years[0]]['Diluted Net Income Available to Common Stockholders']) - 1
@@ -213,7 +213,7 @@ for company in company_list:
     # Financial Health:
     stock_data['Quick Ratio'] = (last_year_data['Cash, Cash Equivalents and Short Term Investments'] + last_year_data['Trade and Other Receivables, Current']) / last_year_data['Total Current Liabilities']
     stock_data['Current Ratio'] = last_year_data['Total Current Assets'] / last_year_data['Total Current Liabilities']
-    stock_data['Interest Coverage'] = last_year_data['Net Interest Income/Expense'] / stock_data['EBITDA']
+    stock_data['Interest Coverage'] = last_year_data['Total Operating Profit/Loss'] / last_year_data['Net Interest Income/Expense']
     stock_data['Debt/ Equity'] = last_year_data['Total Liabilities'] / last_year_data['Total Equity']
 
     # Profitability:
