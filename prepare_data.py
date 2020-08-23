@@ -230,15 +230,16 @@ for company in company_list:
     pp.pprint(company_data)
 
     # Write data to excel
-    # print(stock_data['name'])
+    red_cell = workbook.add_format({'bg_color': '#FFC7CE'})
+    green_cell = workbook.add_format({'bg_color': '#90EE90'})
 
-    worksheet.write(0, column_index, stock_data['name'])
+    worksheet.write(0, column_index, stock_data['name'], red_cell)
     row_index = 1
     for category, key_names in excel_output.items():
         row_index += 1
         for key_name in key_names:
             if key_name in stock_data.keys():
-                worksheet.write(row_index, column_index, stock_data[key_name])
+                worksheet.write(row_index, column_index, stock_data[key_name], green_cell)
             row_index += 1
         row_index += 1
     column_index += 1
