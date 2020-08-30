@@ -10,6 +10,7 @@ def string_value_converter(text):
     return value
 
 def best_fit_slope(xs,ys):
+    from statistics import mean
     m = (((mean(xs)*mean(ys)) - mean(xs*ys)) /
          ((mean(xs)**2) - mean(xs**2)))
     return m

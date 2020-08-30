@@ -178,7 +178,7 @@ for company in company_list:
         'value': stock_data['Total Debt']['value']
     }
     stock_data['Tax Rate'] = {
-        'value': last_year_data['Provision for Income Tax'] / last_year_data['Pretax Income'] * 100
+        'value': abs(last_year_data['Provision for Income Tax'] / last_year_data['Pretax Income'])
     }
     stock_data['NOPAT'] = {
         'value': last_year_data['Total Operating Profit/Loss'] * (1 - stock_data['Tax Rate']['value'])
@@ -370,13 +370,24 @@ for company in company_list:
     red_cell = workbook.add_format({'bg_color': '#FFC7CE'})
     green_cell = workbook.add_format({'bg_color': '#90EE90'})
 
-    worksheet.write(0, column_index, stock_data['name'], red_cell)
+    worksheet.write(0, column_index, stock_data['name'])
     row_index = 1
     for category, key_names in excel_output.items():
         row_index += 1
         for key_name in key_names:
             if key_name in stock_data.keys():
-                worksheet.write(row_index, column_index, stock_data[key_name], green_cell)
+                # check if its dict
+                if type(stock_data[key_name]) is dict:
+                    # print colour cells according to condition
+                    if stock_data[key_name].get('condition', None) == True:
+                        worksheet.write(row_index, column_index, stock_data[key_name]['value'], green_cell)
+                    elif stock_data[key_name].get('condition', None) == False:
+                        worksheet.write(row_index, column_index, stock_data[key_name]['value'], red_cell)
+                    else:
+                        worksheet.write(row_index, column_index, stock_data[key_name]['value'])
+                else:
+                    worksheet.write(row_index, column_index, stock_data[key_name])
+
             row_index += 1
         row_index += 1
     column_index += 1
