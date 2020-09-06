@@ -1,10 +1,10 @@
 [
-{"name": "GASMSIA", "code": "5209", "category": "Utilities - Main Market", "price": "2.820", "DY": "5.00%", "Market Cap": "3,620.9M"},
-{"name": "RANHILL", "code": "5272", "category": "Utilities - Main Market", "price": "0.930", "DY": "5.38%", "Market Cap": "997.8M"},
-{"name": "YTLPOWR", "code": "6742", "category": "Utilities - Main Market", "price": "0.670", "DY": "7.46%", "Market Cap": "5,466.0M"},
-{"name": "SALCON", "code": "8567", "category": "Utilities - Main Market", "price": "0.160", "DY": "0.00%", "Market Cap": "135.5M"},
-{"name": "PBA", "code": "5041", "category": "Utilities - Main Market", "price": "0.850", "DY": "4.12%", "Market Cap": "281.6M"},
-{"name": "PETGAS", "code": "6033", "category": "Utilities - Main Market", "price": "16.960", "DY": "4.83%", "Market Cap": "33,559.3M"},
-{"name": "TALIWRK", "code": "8524", "category": "Utilities - Main Market", "price": "0.840", "DY": "6.25%", "Market Cap": "1,693.3M"},
-{"name": "YTL", "code": "4677", "category": "Utilities - Main Market", "price": "0.825", "DY": "4.85%", "Market Cap": "9,093.8M"}
+{"name": "PBA", "code": "5041", "category": "Utilities - Main Market", "price": "0.845", "dividend_yield": "4.14%", "market_cap": "279.9M"},
+{"name": "GASMSIA", "code": "5209", "category": "Utilities - Main Market", "price": "2.780", "dividend_yield": "5.07%", "market_cap": "3,569.5M"},
+{"name": "RANHILL", "code": "5272", "category": "Utilities - Main Market", "price": "0.880", "dividend_yield": "0.00%", "market_cap": "944.2M"},
+{"name": "YTLPOWR", "code": "6742", "category": "Utilities - Main Market", "price": "0.670", "dividend_yield": "0.00%", "market_cap": "5,466.0M"},
+{"name": "TALIWRK", "code": "8524", "category": "Utilities - Main Market", "price": "0.870", "dividend_yield": "6.03%", "market_cap": "1,753.8M"},
+{"name": "YTL", "code": "4677", "category": "Utilities - Main Market", "price": "0.700", "dividend_yield": "0.00%", "market_cap": "7,715.9M"},
+{"name": "PETGAS", "code": "6033", "category": "Utilities - Main Market", "price": "17.360", "dividend_yield": "4.72%", "market_cap": "34,350.8M"},
+{"name": "SALCON", "code": "8567", "category": "Utilities - Main Market", "price": "0.220", "dividend_yield": "0.00%", "market_cap": "186.4M"}
 ]

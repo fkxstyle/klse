@@ -17,7 +17,7 @@ from dateutil import tz
 from random import randint
 from decimal import Decimal
 from datetime import datetime
-from utils import string_value_converter, best_fit_slope
+from utils import string_value_converter, best_fit_slope, prepare_numeric_value_format
 from statistics import mean
 import xlsxwriter
 
@@ -153,6 +153,7 @@ for company in company_list:
     all_years = company_data.columns
 
     # feed data to json
+    stock_data['Year of Study'] = last_year
     stock_data['EBITDA'] = {
         'value': last_year_data['Pretax Income'] + last_year_data['Net Interest Income/Expense'] + last_year_data['Depreciation, Amortization and Depletion, Supplemental']
     }
@@ -378,14 +379,17 @@ for company in company_list:
             if key_name in stock_data.keys():
                 # check if its dict
                 if type(stock_data[key_name]) is dict:
+                    cell_value = stock_data[key_name]['value']
+                    cell_value = prepare_numeric_value_format(cell_value)
                     # print colour cells according to condition
                     if stock_data[key_name].get('condition', None) == True:
-                        worksheet.write(row_index, column_index, stock_data[key_name]['value'], green_cell)
+                        worksheet.write(row_index, column_index, cell_value, green_cell)
                     elif stock_data[key_name].get('condition', None) == False:
-                        worksheet.write(row_index, column_index, stock_data[key_name]['value'], red_cell)
+                        worksheet.write(row_index, column_index, cell_value, red_cell)
                     else:
-                        worksheet.write(row_index, column_index, stock_data[key_name]['value'])
+                        worksheet.write(row_index, column_index, cell_value)
                 else:
+                    cell_value = stock_data[key_name]
                     worksheet.write(row_index, column_index, stock_data[key_name])
 
             row_index += 1

@@ -1,3 +1,5 @@
+import numpy as np
+
 def string_value_converter(text):
     if text[-1:] == 'K' or text[-1:] == 'k':  # Check if the last digit is K
         value = float(text[:-1]) * 1000  # Remove the last digit with [:-1], and convert to int and multiply by 1000
@@ -14,3 +16,9 @@ def best_fit_slope(xs,ys):
     m = (((mean(xs)*mean(ys)) - mean(xs*ys)) /
          ((mean(xs)**2) - mean(xs**2)))
     return m
+
+def prepare_numeric_value_format(value):
+    numeric_type_tuple = (np.int64, np.float64, int, float)
+    if isinstance(value, numeric_type_tuple):
+        value = '{:,}'.format(round(value,2))
+    return value
