@@ -23,8 +23,8 @@
         "ROE > 10%",
         "Net cash companies (RM mil)",
         "Companies with good FCF (RM mil)",
-        "Dividend Pay-out ratio ≤ 75%",
-        "Dividend Yield ≥ 10-year Malaysia Government Bond (3.43%)"
+        "Dividend Pay-out ratio < 75%",
+        "Dividend Yield > 10-year Malaysia Government Bond (3.43%)"
     ],
     "Adam Khoo": [
         "3 years x Net income > Long term debt"

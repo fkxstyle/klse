@@ -213,10 +213,9 @@ for company in company_list:
     sr_cash_dividends_paid_values = np.array(sr_cash_dividends_paid.values.tolist(), dtype=np.float64)
     gradient = best_fit_slope(sr_cash_dividends_paid_index, sr_cash_dividends_paid_values)
     stock_data['Earning stability in the past 10 years (EPS)'] = {
-        'value': gradient,
+        'value': 'uptrend' if gradient > 0 else 'downtrend',
         'condition': gradient > 0,
     }
-
     sr_dividend_year = (company_data.loc['Cash Dividends Paid'] != 0)
     year_with_dividend = sr_dividend_year[sr_dividend_year == True].index.values.tolist()
     stock_data['Dividend uninterupted for past 20 years'] = {
@@ -250,11 +249,11 @@ for company in company_list:
     stock_data['Companies with good FCF (RM mil)'] = {
         'value': last_year_data['Cash Flow from Operating Activities, Indirect'] - abs(last_year_data['Purchase of Property, Plant and Equipment'])
     }
-    stock_data['Dividend Pay-out ratio ≤ 75%'] = {
+    stock_data['Dividend Pay-out ratio < 75%'] = {
         'value': abs(stock_data['Dividend Per Share']['value']) / abs(stock_data['Earning Per Share']['value']) * 100,
         'condition': abs(stock_data['Dividend Per Share']['value']) / abs(stock_data['Earning Per Share']['value']) * 100 < 75
     }
-    stock_data['Dividend Yield ≥ 10-year Malaysia Government Bond (3.43%)'] = {
+    stock_data['Dividend Yield > 10-year Malaysia Government Bond (3.43%)'] = {
         'value': string_value_converter(stock_data['dividend_yield']),
         'condition': string_value_converter(stock_data['dividend_yield']) > malaysia_government_bond_rate
     }
