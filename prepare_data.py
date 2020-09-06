@@ -153,7 +153,7 @@ for company in company_list:
     all_years = company_data.columns
 
     # feed data to json
-    stock_data['Year of Study'] = last_year
+    stock_data['Financial Year'] = last_year
     stock_data['EBITDA'] = {
         'value': last_year_data['Pretax Income'] + last_year_data['Net Interest Income/Expense'] + last_year_data['Depreciation, Amortization and Depletion, Supplemental']
     }
